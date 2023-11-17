@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medals Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+    
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    
+        .personal-details {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+    
+        .tabs button {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+    
+        .tabs button:hover {
+            background-color: #555;
+        }
+    
+        .container {
+            text-align: center;
+        }
+    
+        .medals-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+    
+        .medals-table, .medals-table th, .medals-table td {
+            border: 1px solid #ddd;
+        }
+    
+        .medals-table th, .medals-table td {
+            padding: 15px; /* Increased padding for a more professional look */
+            text-align: center;
+        }
+    
+        .medals-table th {
+            background-color: #333;
+            color: #fff;
+        }
+    
+        .medals-table tr:nth-child(even) {
+            background-color: #f9f9f9; /* Alternate color for even rows */
+        }
+    
+        .medals-table tr:nth-child(odd) {
+            background-color: #e6e6e6; /* Alternate color for odd rows */
+        }
+    
+        @media screen and (max-width: 600px) {
+            .tabs {
+                flex-direction: column;
+            }
+    
+            .tabs button {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="header">
+        <div class="personal-details">
+            <h2>Doragacharla Lizy</h2>
+            <p>Email:lizydoragacharla@gmail.com</p>
+            <p>Contact:8106868075</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="tabs">
+            <button onclick="showTable()">Table</button>
+            <button onclick="showChart()">Chart</button>
+        </div>
+
+        <div id="table-container" class="container">
+            <!-- Table will be rendered here -->
+        </div>
+
+        <div id="chart-container" class="container" style="display:none;">
+            <!-- Chart will be rendered here -->
+            <canvas id="medalsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script src="dummyData.json"></script>
+    <script>
+        function showTable() {
+            document.getElementById("table-container").style.display = "block";
+            document.getElementById("chart-container").style.display = "none";
+        }
+
+        function showChart() {
+            document.getElementById("chart-container").style.display = "block";
+            document.getElementById("table-container").style.display = "none";
+            renderChart();
+        }
+
+        const dummyData = [
+            {
+                "Id": 1,
+                "Year": 2004,
+                "Medals": 1
+            },
+            {
+                "Id": 2,
+                "Year": 2008,
+                "Medals": 3
+            },
+            {
+                "Id": 3,
+                "Year": 2012,
+                "Medals": 6
+            },
+            {
+                "Id": 4,
+                "Year": 2016,
+                "Medals": 2
+            },
+            {
+                "Id": 5,
+                "Year": 2020,
+                "Medals": 7
+            }
+        ];
+
+        function renderTable() {
+            const tableContainer = document.getElementById("table-container");
+            const table = document.createElement("table");
+            table.className = "medals-table";
+
+            const headerRow = table.insertRow(0);
+            const headerCell1 = headerRow.insertCell(0);
+            const headerCell2 = headerRow.insertCell(1);
+            const headerCell3 = headerRow.insertCell(2);
+            headerCell1.textContent = "ID";
+            headerCell2.textContent = "Year";
+            headerCell3.textContent = "Medals";
+
+            dummyData.forEach(data => {
+                const row = table.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                cell1.textContent = data.Id;
+                cell2.textContent = data.Year;
+                cell3.textContent = data.Medals;
+            });
+
+            tableContainer.innerHTML = "";
+            tableContainer.appendChild(table);
+        }
+
+        function renderChart() {
+            const chartContainer = document.getElementById("chart-container");
+
+            const years = dummyData.map(data => data.Year);
+            const medals = dummyData.map(data => data.Medals);
+
+            const ctx = document.getElementById('medalsChart').getContext('2d');
+            const medalsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Medals won',
+                        borderColor: 'rgb(75, 192, 192)',
+                        data: medals,
+                    }]
+                }
+            });
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
